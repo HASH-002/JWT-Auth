@@ -1,15 +1,15 @@
 const express = require('express')
 const createError = require('http-errors')
+const morgan = require('morgan') 
 const { port } = require('./config')
+var authRoute = require('./routes/auth')
 
 const app = express()
+app.use(morgan('dev'))
 
-const PORT = port || 5000
+app.use('/auth', authRoute)
 
-app.get('/', async (req, res, next)=> {
-    res.send('Hello World')
-})
-
+// Error Handlers
 app.use( async (req, res, next)=> {
     next(createError.NotFound()) // passing error as first parameter
 })
@@ -24,6 +24,7 @@ app.use((err,req,res,next)=>{
     })  
 })
 
+const PORT = port || 5000
 app.listen(PORT, () => {
     console.log(`App running in PORT ${PORT}`)
 })
