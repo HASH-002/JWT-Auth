@@ -3,6 +3,7 @@ const createError = require('http-errors')
 const morgan = require('morgan') 
 const { port } = require('./config')
 var authRoute = require('./routes/auth')
+require('./configs/dbconfig')
 
 const app = express()
 app.use(morgan('dev'))
@@ -18,6 +19,7 @@ app.use((err,req,res,next)=>{
     res.status = err.status || 500
     res.send({
         error:{
+            success: false,
             status: err.status || 500, // error object does not show status so we need to make that field
             message: err.message
         }
